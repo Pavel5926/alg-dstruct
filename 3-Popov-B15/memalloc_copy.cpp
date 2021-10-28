@@ -16,8 +16,7 @@ static struct {
 	int full_size;
 } mem_struct = { (descriptor_t*)NULL,0 };
 
-int memgetminimumsize()
-{
+int memgetminimumsize() {
 	return sizeof(descriptor_t);
 }
 
@@ -25,15 +24,13 @@ int memgetblocksize() {
 	return sizeof(descriptor_t);
 }
 
-void memdone()
-{
+void memdone() {
 	mem_struct.list = NULL;
 	mem_struct.full_size = 0;
 }
 
 
-int meminit(void* memUnit, int size)
-{
+int meminit(void* memUnit, int size) {
 	int desc_size = memgetblocksize();
 	int min_size = memgetminimumsize();
 	if ((size < min_size + 1) || (!memUnit))
