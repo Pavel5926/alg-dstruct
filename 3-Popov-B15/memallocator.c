@@ -33,8 +33,9 @@ void memdone() {
 int meminit(void* memUnit, int size) {
 	int desc_size = memgetblocksize();
 	int min_size = memgetminimumsize();
-	if ((size < min_size + 1) || (!memUnit))
+	if ((size < min_size + 1) || (!memUnit)) {
 		return 0;
+	}
 	else {
 		mem_struct.list = (descriptor_t*)memUnit;
 		mem_struct.list->is_ready = TRUE;
@@ -52,8 +53,9 @@ void* memalloc(int size) {
 	descriptor_t* best_fit = NULL;
 	int node_size = memgetblocksize();
 	void* result = NULL;
-	if ((!mem_struct.list) || (size <= 0))
+	if ((!mem_struct.list) || (size <= 0)) {
 		return NULL;
+	}
 	if (mem_struct.list) {
 		tmp = mem_struct.list;
 
@@ -64,7 +66,7 @@ void* memalloc(int size) {
 			tmp = tmp->next;
 		}
 		if (best_fit) {
-			if (best_fit->size <= size + memgetminimumsize()) {
+			if (best_fit->size <= size + memgetblocksize()) {
 				best_fit->is_ready = FALSE;
 			}
 			else {
@@ -119,8 +121,7 @@ void memfree(void* ptr) {
 			if (new_free->prev) {
 				if (new_free->prev->is_ready) {
 					first_free = new_free->prev;
-					if (first_free->next)
-						first_free->size += first_free->next->size + node_size;
+					first_free->size += first_free->next->size + node_size;
 					if (first_free->next) {
 						if (first_free->next->next) {
 							first_free->next->next->prev = first_free;
