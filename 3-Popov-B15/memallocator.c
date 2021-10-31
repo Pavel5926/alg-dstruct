@@ -122,14 +122,12 @@ void memfree(void* ptr) {
 				if (new_free->prev->is_ready) {
 					first_free = new_free->prev;
 					first_free->size += first_free->next->size + node_size;
-					if (first_free->next) {
-						if (first_free->next->next) {
-							first_free->next->next->prev = first_free;
-							first_free->next = first_free->next->next;
-						}
-						else {
-							first_free->next = NULL;
-						}
+					if (first_free->next->next) {
+						first_free->next->next->prev = first_free;
+						first_free->next = first_free->next->next;
+					}
+					else {
+						first_free->next = NULL;
 					}
 				}
 			}
