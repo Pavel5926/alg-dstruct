@@ -12,8 +12,9 @@ int IsEmpty(stack_t* stack) {
 	if (!stack->top) {
 		return TRUE;
 	}
-	else
+	else {
 		return FALSE;
+	}
 }
 
 stack_t* Push(stack_t* stack, int vert) {
@@ -55,6 +56,9 @@ int Peek(stack_t* stack) {
 }
 
 int** MatrixCreate(int vert_num) {
+	if (vert_num < 1) {
+		return NULL;
+	}
 	int** matrix = (int**)malloc(sizeof(int*) * vert_num);
 	if (!matrix) {
 		return NULL;
@@ -62,10 +66,11 @@ int** MatrixCreate(int vert_num) {
 	for (int i = 0; i < vert_num; i++) {
 		matrix[i] = (int*)malloc(sizeof(int) * vert_num);
 		if (!matrix[i]) {
-			for (int j = 0; j <= i; j++) {
+			for (int j = 0; j < i; j++) {
 				free(matrix[j]);
 			}
 			free(matrix);
+			return NULL;
 		}
 	}
 	return matrix;
@@ -82,7 +87,7 @@ int** ReadGraph(FILE* f, int** matrix) {
 	int check = 0;
 	int vert1, vert2;
 	while (feof(f) == 0) {
-		fscanf(f, "%d %d\n", &vert1, &vert2);
+		check = fscanf(f, "%d %d\n", &vert1, &vert2);
 		matrix[vert1][vert2] = 1;
 		matrix[vert2][vert1] = 1;
 	}
@@ -97,7 +102,11 @@ int GetAdjUnvisitedVertex(int** matrix, int* visited, int vert, int vert_num) {
 	}
 	return -1;
 }
-int DFS(int** matrix, int vert_num,FILE* out) {
+
+int DFS(int** matrix, int vert_num, FILE* out) {
+	if (vert_num < 1) {
+		return 0;
+	}
 	int* visited = (int*)malloc(sizeof(int) * vert_num);
 	if (!visited) {
 		perror("");
@@ -118,7 +127,6 @@ int DFS(int** matrix, int vert_num,FILE* out) {
 	if (!stack) {
 		perror("");
 		free(visited);
-		StackDelete(stack);
 		return 0;
 	}
 	fprintf(out, "%d ", Peek(stack));
@@ -128,17 +136,23 @@ int DFS(int** matrix, int vert_num,FILE* out) {
 		if (cur_vert == -1) {
 			Pop(stack);
 			if (Peek(stack) == 0) {
-				return 1;
+				free(stack->top);
+				free(stack);
+				free(visited);
+				break;
 			}
 		}
 		else {
 			visited[cur_vert] = 1;
 			fprintf(out, "%d ", cur_vert);
 			Push(stack, cur_vert);
+			if (Peek(stack) != cur_vert) {
+				StackDelete(stack);
+				free(visited);
+				return 0;
+			}
 		}
 	}
-	StackDelete(stack);
-	free(visited);
 	return 1;
 }
 
@@ -155,30 +169,41 @@ void PrintMatrix(int** mass, int size) {
 	for (int str = 0; str < size; str++) {
 		for (int col = 0; col < size; col++) {
 			printf("%d ", mass[str][col]);
-			// printf("%d ", mass[str] [ col]);
 		}
 		printf("\n");
 	}
 }
 
-//int main(void) {
-//	//FILE* in = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C.txt", "r");
-//	FILE* in = stdin;
-//	FILE* out = stdout;
-//	if (!in) {
-//		perror("");
-//		return -1;
-//	}
-//	int check = 0;
-//	int vert_num = 0;
-//	check = fscanf(in, "%d", &vert_num);
-//	int** matrix = MatrixCreate(vert_num);
-//	FillZero(matrix, vert_num);
-//	if (!matrix) {
-//		perror("");
-//		return -1;
-//	}
-//	ReadGraph(in, matrix);
-//	//PrintMatrix(matrix, vert_num);
-//	DFS(matrix, vert_num, out);
-//}
+int main(void) {
+	FILE* in = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C.txt", "r");
+	//FILE* in = stdin;
+	//FILE* out = stdout;
+	FILE* out = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C_out.txt", "w");
+	if (!in) {
+		perror("");
+		return -1;
+	}
+	if (!out) {
+		perror("");
+		fclose(in);
+		return -1;
+	}
+	int check = 0;
+	int vert_num = 0;
+	check = fscanf(in, "%d", &vert_num);
+	int** matrix = MatrixCreate(vert_num);
+	if (!matrix) {
+		perror("");
+		fclose(in);
+		fclose(out);
+		return -1;
+	}
+	FillZero(matrix, vert_num);
+	ReadGraph(in, matrix);
+	//PrintMatrix(matrix, vert_num);
+	DFS(matrix, vert_num, out);
+	MatrixDelete(matrix, vert_num);
+	fclose(in);
+	fclose(out);
+	return 3;
+}

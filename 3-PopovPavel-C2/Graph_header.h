@@ -7,7 +7,6 @@
 #define TRUE 1
 #define FALSE 0
 #define EMPTY_STACK -1
-#define EMPTY_LIST -1
 
 typedef struct node {
 	int vert;

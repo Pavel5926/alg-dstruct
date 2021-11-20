@@ -46,19 +46,21 @@ TEST(loadTest, graphReadAndBFS) {
     int check = fscanf(in, "%d", &vert_num);
     int** matrix = MatrixCreate(vert_num);
     if (!matrix) {
+        fclose(in);
         perror("");
         FAIL();
     }
     ReadGraph(in, matrix);
-    fclose(in);
     FILE* out = fopen(filename_out, "w");
     if (!out) {
+        fclose(in);
         MatrixDelete(matrix, vert_num);
         perror("");
         FAIL();
     }
-    int check_DFS=DFS(matrix, vert_num,out);
+    int check_DFS = DFS(matrix, vert_num, out);
     ASSERT_EQ(check_DFS, 1);
     MatrixDelete(matrix,vert_num);
+    fclose(in);
     fclose(out);
 }
