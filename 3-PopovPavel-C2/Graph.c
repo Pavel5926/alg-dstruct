@@ -5,6 +5,7 @@ stack_t* StackCreate() {
 	if (!stack) {
 		return NULL;
 	}
+	stack->top = NULL;
 	return stack;
 }
 
@@ -84,6 +85,10 @@ void MatrixDelete(int** matrix, int vert_num) {
 }
 
 int** ReadGraph(FILE* f, int** matrix) {
+	if (!f) {
+		perror("");
+		return NULL;
+	}
 	int check = 0;
 	int vert1, vert2;
 	while (feof(f) == 0) {
@@ -110,7 +115,7 @@ int DFS(int** matrix, int vert_num, FILE* out) {
 	int* visited = (int*)malloc(sizeof(int) * vert_num);
 	if (!visited) {
 		perror("");
-		return 0;
+		return -1;
 	}
 	for (int i = 0; i < vert_num; i++) {
 		visited[i] = 0;
@@ -119,15 +124,16 @@ int DFS(int** matrix, int vert_num, FILE* out) {
 	if (!stack) {
 		perror("");
 		free(visited);
-		return 0;
+		return -1;
 	}
 	int start = 0;
 	visited[0] = 1;
 	stack = Push(stack, start);
 	if (!stack) {
 		perror("");
+		StackDelete(stack);
 		free(visited);
-		return 0;
+		return -1;
 	}
 	fprintf(out, "%d ", Peek(stack));
 	while (!IsEmpty(stack)) {
@@ -136,8 +142,7 @@ int DFS(int** matrix, int vert_num, FILE* out) {
 		if (cur_vert == -1) {
 			Pop(stack);
 			if (Peek(stack) == 0) {
-				free(stack->top);
-				free(stack);
+				StackDelete(stack);
 				free(visited);
 				break;
 			}
@@ -149,7 +154,7 @@ int DFS(int** matrix, int vert_num, FILE* out) {
 			if (Peek(stack) != cur_vert) {
 				StackDelete(stack);
 				free(visited);
-				return 0;
+				return -1;
 			}
 		}
 	}
@@ -208,5 +213,5 @@ int main(void) {
 	MatrixDelete(matrix, vert_num);
 	fclose(in);
 	fclose(out);
-	return 3;
+	return 0;
 }
