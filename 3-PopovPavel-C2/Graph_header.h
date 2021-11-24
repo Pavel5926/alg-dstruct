@@ -19,13 +19,13 @@ typedef struct stack {
 
 stack_t* StackCreate();
 int IsEmpty(stack_t* stack);
-stack_t* Push(stack_t* stack, int vert);
+int Push(stack_t* stack, int vert);
 int Pop(stack_t* stack);
 void StackDelete(stack_t* stack);
 int Peek(stack_t* stack);
 int** MatrixCreate(int vert_num);
 void MatrixDelete(int** matrix, int vert_num);
-int** ReadGraph(FILE* f, int** matrix);
+int ReadGraph(FILE* f, int** matrix);
 int GetAdjUnvisitedVertex(int** matrix, int* visited, int vert, int vert_num);
 int DFS(int** matrix, int vert_num, FILE* out);
 void FillZero(int** matrix, int n);

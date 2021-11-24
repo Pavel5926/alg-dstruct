@@ -75,7 +75,12 @@ TEST_F(LoadTestMemory, graphReadAndBFS) {
 		FAIL();
 	}
 
-	ReadGraph(in, matrix);
+	int check = ReadGraph(in, matrix);
+	if (!check) {
+		fclose(in);
+		MatrixDelete(matrix, vert_num);
+		FAIL();
+	}
 	FILE* out = fopen(filename_out, "w");
 	if (!out) {
 		fclose(in);
@@ -84,7 +89,7 @@ TEST_F(LoadTestMemory, graphReadAndBFS) {
 		FAIL();
 	}
 	int check_DFS = DFS(matrix, vert_num, out);
-	ASSERT_EQ(check_DFS, 1);
+	EXPECT_EQ(check_DFS, 1);
 	MatrixDelete(matrix, vert_num);
 	fclose(in);
 	fclose(out);
