@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\Graph.c"
+#include "Graph_header.h"
+#include "Graph.c"
 
 /*
  * OS: Windows 10 Pro 21H1 19043.1348
@@ -15,10 +16,29 @@
   * RAM:  up to 1.7 GB
   */
 
+class TestMemory : public ::testing::Test {
+protected:
+	_CrtMemState s1, s2, s3;
+
+	void SetUp() {
+		_CrtMemCheckpoint(&s1);
+	}
+
+	void TearDown() {
+		_CrtMemCheckpoint(&s2);
+		if (_CrtMemDifference(&s3, &s1, &s2)) {
+			_CrtMemDumpStatistics(&s3);
+			FAIL();
+		}
+	}
+};
+
+class LoadTestMemory : public TestMemory {};
+
 const char* filename_in = "TestData.txt";
 const int verticesCount = (int)20000;
 
-TEST(loadTest, graphGeneration) {
+TEST_F(LoadTestMemory, graphGeneration) {
 	const int maxNeighbourDelta = verticesCount / 5;
 	FILE* in = fopen(filename_in, "w");
 	if (!in) {
@@ -35,21 +55,26 @@ TEST(loadTest, graphGeneration) {
 	fclose(in);
 }
 
-TEST(loadTest, graphReadAndBFS) {
+TEST_F(LoadTestMemory, graphReadAndBFS) {
 	const char* filename_out = "D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C_Out.txt";
 	FILE* in = fopen(filename_in, "r");
 	if (!in) {
 		perror("");
 		FAIL();
+
 	}
 	int vert_num = 0;
 	int check = fscanf(in, "%d", &vert_num);
+	//if (vert_num < 1) {
+	//	fclose(in);
+	//	FAIL();
+	//}
 	int** matrix = MatrixCreate(vert_num);
 	if (!matrix) {
 		fclose(in);
-		perror("");
 		FAIL();
 	}
+
 	ReadGraph(in, matrix);
 	FILE* out = fopen(filename_out, "w");
 	if (!out) {

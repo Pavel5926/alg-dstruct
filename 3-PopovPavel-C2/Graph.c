@@ -1,5 +1,4 @@
 #include "Graph_header.h"
-
 stack_t* StackCreate() {
 	stack_t* stack = (stack_t*)malloc(sizeof(stack));
 	if (!stack) {
@@ -129,6 +128,7 @@ int DFS(int** matrix, int vert_num, FILE* out) {
 	int start = 0;
 	visited[0] = 1;
 	stack = Push(stack, start);
+	//stack = NULL;
 	if (!stack) {
 		perror("");
 		StackDelete(stack);
@@ -199,18 +199,23 @@ int main(void) {
 	int check = 0;
 	int vert_num = 0;
 	check = fscanf(in, "%d", &vert_num);
-	int** matrix = MatrixCreate(vert_num);
-	if (!matrix) {
-		perror("");
-		fclose(in);
-		fclose(out);
-		return -1;
+	if (vert_num == 1) {
+		fprintf(out, "0");
 	}
-	FillZero(matrix, vert_num);
-	ReadGraph(in, matrix);
-	//PrintMatrix(matrix, vert_num);
-	DFS(matrix, vert_num, out);
-	MatrixDelete(matrix, vert_num);
+	else {
+		int** matrix = MatrixCreate(vert_num);
+		if (!matrix) {
+			perror("");
+			fclose(in);
+			fclose(out);
+			return -1;
+		}
+		FillZero(matrix, vert_num);
+		ReadGraph(in, matrix);
+		//PrintMatrix(matrix, vert_num);
+		DFS(matrix, vert_num, out);
+		MatrixDelete(matrix, vert_num);
+	}
 	fclose(in);
 	fclose(out);
 	return 0;
