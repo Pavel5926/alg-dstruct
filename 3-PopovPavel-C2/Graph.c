@@ -138,7 +138,7 @@ int DFS(int** matrix, int vert_num, FILE* out) {
 		cur_vert = GetAdjUnvisitedVertex(matrix, visited, Peek(stack), vert_num);
 		if (cur_vert == -1) {
 			Pop(stack);
-			if (Peek(stack) == 0) {
+			if (!stack->top) {
 				//StackDelete(stack);
 				//free(visited);
 				break;
@@ -180,41 +180,41 @@ void PrintMatrix(int** mass, int size) {
 	}
 }
 //
-//int main(void) {
-//	FILE* in = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C.txt", "r");
-//	//FILE* in = stdin;
-//	//FILE* out = stdout;
-//	FILE* out = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C_out.txt", "w");
-//	if (!in) {
-//		perror("");
-//		return -1;
-//	}
-//	if (!out) {
-//		perror("");
-//		fclose(in);
-//		return -1;
-//	}
-//	int check = 0;
-//	int vert_num = 0;
-//	check = fscanf(in, "%d", &vert_num);
-//	if (vert_num == 1) {
-//		fprintf(out, "0");
-//	}
-//	else {
-//		int** matrix = MatrixCreate(vert_num);
-//		if (!matrix) {
-//			perror("");
-//			fclose(in);
-//			fclose(out);
-//			return -1;
-//		}
-//		FillZero(matrix, vert_num);
-//		ReadGraph(in, matrix);
-//		//PrintMatrix(matrix, vert_num);
-//		DFS(matrix, vert_num, out);
-//		MatrixDelete(matrix, vert_num);
-//	}
-//	fclose(in);
-//	fclose(out);
-//	return 0;
-//}
+int main(void) {
+	FILE* in = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C.txt", "r");
+	//FILE* in = stdin;
+	FILE* out = stdout;
+	//FILE* out = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-C2\\For_Lab_C_out.txt", "w");
+	if (!in) {
+		perror("");
+		return -1;
+	}
+	if (!out) {
+		perror("");
+		fclose(in);
+		return -1;
+	}
+	int check = 0;
+	int vert_num = 0;
+	check = fscanf(in, "%d", &vert_num);
+	if (vert_num == 1) {
+		fprintf(out, "0");
+	}
+	else {
+		int** matrix = MatrixCreate(vert_num);
+		if (!matrix) {
+			perror("");
+			fclose(in);
+			fclose(out);
+			return -1;
+		}
+		FillZero(matrix, vert_num);
+		ReadGraph(in, matrix);
+		//PrintMatrix(matrix, vert_num);
+		DFS(matrix, vert_num, out);
+		MatrixDelete(matrix, vert_num);
+	}
+	fclose(in);
+	fclose(out);
+	return 0;
+}
