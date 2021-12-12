@@ -1,15 +1,16 @@
 #include "sudoku_header.h"
+
 int** MatrixInit(int dimension) {
 	if ((dimension < 9) || (dimension > 81)) {
 		printf("Incorrect size of sudoku matrix, according to the task\n");
 		return NULL;
 	}
-	int** matrix = (int**)malloc(sizeof(double*) * dimension);
+	int** matrix = (int**)malloc(sizeof(int*) * dimension);
 	if (!matrix) {
 		return NULL;
 	}
 	for (int i = 0; i < dimension; i++) {
-		matrix[i] = (int*)malloc(sizeof(double) * dimension);
+		matrix[i] = (int*)malloc(sizeof(int) * dimension);
 		if (!matrix[i]) {
 			for (int j = 0; j < i; j++) {
 				free(matrix[j]);
@@ -43,7 +44,7 @@ int ParseMatrix(FILE* f, int** matrix, int dimension) {
 	return TRUE;
 }
 
-void  MatrixDelete(int** matrix, int dimension) {
+void MatrixDelete(int** matrix, int dimension) {
 	if (!matrix) {
 		return;
 	}
@@ -91,6 +92,7 @@ int IsPossibleToAdd(int** sudoku, int str, int col, int num, int dimension, int 
 	}
 	return TRUE;
 }
+
 int SudokuSolver(int** matrix, int dimension, int small_dimension, int s_cur) {
 	if (!matrix) {
 		return FALSE;
@@ -101,6 +103,7 @@ int SudokuSolver(int** matrix, int dimension, int small_dimension, int s_cur) {
 	}
 	return Solve(matrix, dimension, small_dimension, s_cur);
 }
+
 int Solve(int** sudoku, int dimension, int small_dimension, int s_cur) {
 	for (; s_cur < dimension; s_cur++) {
 		for (int c_cur = 0; c_cur < dimension; c_cur++) {
@@ -120,28 +123,3 @@ int Solve(int** sudoku, int dimension, int small_dimension, int s_cur) {
 	return TRUE;
 }
 
-//
-//int main()
-//{
-//	FILE* f = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-D14\\Sudoku.txt", "r");
-//	if (!f)
-//	{
-//		perror("");
-//		return -1;
-//	}
-//	int small_dimension = 0;
-//	int check = fscanf(f, "%d", &small_dimension);
-//	int dimension = small_dimension * small_dimension;
-//	int** sudoku = MatrixInit(dimension);
-//	ParseMatrix(f, sudoku, dimension);
-//	int str_cur = 0;
-//	if (SudokuSolver(sudoku, dimension, small_dimension, str_cur)) {
-//		PrintMatrix(sudoku, dimension);
-//	}
-//	else {
-//		printf("0\n");
-//	}
-//	MatrixDelete(sudoku, dimension);
-//	fclose(f);
-//	return 0;
-//}
