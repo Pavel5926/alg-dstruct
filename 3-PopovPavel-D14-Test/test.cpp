@@ -59,25 +59,8 @@ TEST(SudokuSolverTest, StressTest) {
 		fclose(in);
 		FAIL();
 	}
-	int small_dimension = 0;
-	int checkin = fscanf(in, "%d", &small_dimension);
-	int dimension = small_dimension * small_dimension;
-	int** sudoku = MatrixInit(dimension);
-	int parsecheck = ParseMatrix(in, sudoku, dimension);
-	if (!parsecheck) {
-		fclose(in);
-		fclose(out);
-		MatrixDelete(sudoku, dimension);
-		FAIL();
-	}
-	int str_cur = 0;
-	if (SudokuSolver(sudoku, dimension, small_dimension, str_cur)) {
-		PrintMatrix(out, sudoku, dimension);
-	}
-	else {
-		printf("0\n");
-	}
-	MatrixDelete(sudoku, dimension);
+	int checkcorrect = SudokuSolverFile(in, out);
+	EXPECT_EQ(checkcorrect, 1);
 	fclose(in);
 	fclose(out);
 }
@@ -116,34 +99,17 @@ TEST(SudokuSolverTest, FunctionalTestNoSolutions) {
 		fclose(out);
 		FAIL();
 	}
-	int small_dimension = 0;
-	int checkin = fscanf(in, "%d", &small_dimension);
-	int dimension = small_dimension * small_dimension;
-	int** sudoku = MatrixInit(dimension);
-	int parsecheck = ParseMatrix(in, sudoku, dimension);
-	if (!parsecheck) {
-		fclose(in);
-		fclose(out);
-		fclose(expected);
-		MatrixDelete(sudoku, dimension);
-		FAIL();
-	}
-	int str_cur = 0;
-	int check = -1;
-	check = SudokuSolver(sudoku, dimension, small_dimension, str_cur);
-	EXPECT_EQ(check, 0);
-	fprintf(out, "0");
+	int checkcorrect = SudokuSolverFile(in, out);
+	EXPECT_EQ(checkcorrect, 1);
 	fclose(out);
 	FILE* outcheck = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-D14\\SudokuOutFuncFirst.txt", "r");
 	if (!outcheck) {
 		perror("");
 		fclose(in);
 		fclose(expected);
-		MatrixDelete(sudoku, dimension);
 		FAIL();
 	}
 	testResult(outcheck, expected);
-	MatrixDelete(sudoku, dimension);
 	fclose(in);
 	fclose(outcheck);
 	fclose(expected);
@@ -168,34 +134,17 @@ TEST(SudokuSolverTest, FunctionalTestSolutionFound) {
 		fclose(out);
 		FAIL();
 	}
-	int small_dimension = 0;
-	int checkin = fscanf(in, "%d", &small_dimension);
-	int dimension = small_dimension * small_dimension;
-	int** sudoku = MatrixInit(dimension);
-	int parsecheck = ParseMatrix(in, sudoku, dimension);
-	if (!parsecheck) {
-		fclose(in);
-		fclose(out);
-		fclose(expected);
-		MatrixDelete(sudoku, dimension);
-		FAIL();
-	}
-	int str_cur = 0;
-	int check = -1;
-	check = SudokuSolver(sudoku, dimension, small_dimension, str_cur);
-	EXPECT_EQ(check, 1);
-	PrintMatrix(out, sudoku, dimension);
+	int checkcorrect = SudokuSolverFile(in, out);
+	EXPECT_EQ(checkcorrect, 1);
 	fclose(out);
 	FILE* outcheck = fopen("D:\\repos\\alg-dstruct\\3-PopovPavel-D14\\SudokuOutFuncSecond.txt", "r");
 	if (!outcheck) {
 		perror("");
 		fclose(in);
 		fclose(expected);
-		MatrixDelete(sudoku, dimension);
 		FAIL();
 	}
 	testResult(outcheck, expected);
-	MatrixDelete(sudoku, dimension);
 	fclose(in);
 	fclose(outcheck);
 	fclose(expected);

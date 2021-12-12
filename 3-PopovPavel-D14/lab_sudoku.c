@@ -123,3 +123,32 @@ int Solve(int** sudoku, int dimension, int small_dimension, int s_cur) {
 	return TRUE;
 }
 
+int SudokuSolverFile(FILE* in, FILE* out) {
+	int small_dimension = 0;
+	int checkin = fscanf(in, "%d", &small_dimension);
+	if (checkin < 0) {
+		return FALSE;
+	}
+	int dimension = small_dimension * small_dimension;
+	int** sudoku = MatrixInit(dimension);
+	if (!sudoku) {
+		return FALSE;
+	}
+	int parsecheck = ParseMatrix(in, sudoku, dimension);
+	if (!parsecheck) {
+		MatrixDelete(sudoku, dimension);
+		return FALSE;
+	}
+	int str_cur = 0;
+	int check = -1;
+	check = SudokuSolver(sudoku, dimension, small_dimension, str_cur);
+	if (check) {
+		PrintMatrix(out, sudoku, dimension);
+	}
+	else {
+		fprintf(out, "0");
+	}
+	MatrixDelete(sudoku, dimension);
+	return TRUE;
+}
+
