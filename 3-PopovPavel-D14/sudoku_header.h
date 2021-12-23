@@ -11,3 +11,4 @@ void PrintMatrix(FILE* out, int** matrix, int dimension);
 int IsPossibleToAdd(int** sudoku, int str, int col, int num, int dimension, int small_dimension);
 int Solve(int** sudoku, int dimension, int small_dimension, int s_cur);
 int SudokuSolver(int** matrix, int dimension, int small_dimension, int s_cur);
+int SudokuSolverFile(char const* name_in, char const* name_out);

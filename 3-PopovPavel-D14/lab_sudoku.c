@@ -123,19 +123,36 @@ int Solve(int** sudoku, int dimension, int small_dimension, int s_cur) {
 	return TRUE;
 }
 
-int SudokuSolverFile(FILE* in, FILE* out) {
+int SudokuSolverFile(char const* name_in, char const* name_out) {
+	FILE* in = fopen(name_in, "r");
+	if (!in) {
+		perror("");
+		return FALSE;
+	}
+	FILE* out = fopen(name_out, "w");
+	if (!out) {
+		perror("");
+		fclose(in);
+		return FALSE;
+	}
 	int small_dimension = 0;
 	int checkin = fscanf(in, "%d", &small_dimension);
 	if (checkin < 0) {
+		fclose(in);
+		fclose(out);
 		return FALSE;
 	}
 	int dimension = small_dimension * small_dimension;
 	int** sudoku = MatrixInit(dimension);
 	if (!sudoku) {
+		fclose(in);
+		fclose(out);
 		return FALSE;
 	}
 	int parsecheck = ParseMatrix(in, sudoku, dimension);
 	if (!parsecheck) {
+		fclose(in);
+		fclose(out);
 		MatrixDelete(sudoku, dimension);
 		return FALSE;
 	}
@@ -143,12 +160,15 @@ int SudokuSolverFile(FILE* in, FILE* out) {
 	int check = -1;
 	check = SudokuSolver(sudoku, dimension, small_dimension, str_cur);
 	if (check) {
+		fprintf(out, "%d", small_dimension);
+		fprintf(out, "\n");
 		PrintMatrix(out, sudoku, dimension);
 	}
 	else {
 		fprintf(out, "0");
 	}
 	MatrixDelete(sudoku, dimension);
+	fclose(in);
+	fclose(out);
 	return TRUE;
 }
-
