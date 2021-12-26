@@ -1,5 +1,3 @@
-#ifndef F22_H_INCLUDED__
-#define F22_H_INCLUDED__
 #pragma once
 
 #include<stdio.h>
@@ -9,9 +7,10 @@
 #include <Windows.h>
 
 #define N 100
-#define SMALLNUMBER -9999999
+#define SMALLNUMBER -2147483647 
 #define FOUND 1
 #define NOTFOUND -1
+#define CREATION_FAILED NULL
 
 typedef struct tree {
 	int low;
@@ -27,5 +26,3 @@ int FindTree(tree_t* tree, int low, int high);
 void Intersect(tree_t* tree, int low, int high);
 void PrintTree(tree_t* tree, int index);
 void FreeTree(tree_t* tree);
-tree_t* CreateModelTree(tree_t* tree);
-#endif

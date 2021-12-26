@@ -3,8 +3,9 @@
 tree_t* AddTree(tree_t* tree, int low, int high) {
 	if (tree == NULL) {
 		tree = (tree_t*)malloc(sizeof(tree_t));
-		if (tree == NULL)
+		if (tree == NULL) {
 			return NULL;
+		}
 		tree->high = high;
 		tree->low = low;
 		tree->max = high;
@@ -12,28 +13,39 @@ tree_t* AddTree(tree_t* tree, int low, int high) {
 		tree->right = NULL;
 	}
 	else {
-		if (low < tree->low)
+		if (low < tree->low) {
 			tree->left = AddTree(tree->left, low, high);
-		else {
-			if (low > tree->low)
-				tree->right = AddTree(tree->right, low, high);
+			if (tree->left != NULL) {
+				if (tree->max < high) {
+					tree->max = high;
+				}
+			}
 		}
+
+		if (low > tree->low) {
+			tree->right = AddTree(tree->right, low, high);
+		}
+		if (low == tree->low) {
+			printf("Tree already has an equal key \n.");
+		}
+
 	}
-	if (tree->max < high)
-		tree->max = high;
+
 	return tree;
 }
 static tree_t* MinimumTree(tree_t* tree) {
-	if (tree->left == NULL)
+	if (tree->left == NULL) {
 		return tree;
+	}
 	return MinimumTree(tree->left);
 }
 static int FindMaxArray(int array[N]) {
 	int max = array[0];
 	int i;
 	for (i = 0; i < N; i++) {
-		if (array[i] > max)
+		if (array[i] > max) {
 			max = array[i];
+		}
 	}
 	return max;
 }
@@ -50,11 +62,15 @@ static void MaxOfSubtree(tree_t* tree, int* res) {
 			MaxOfSubtree(tree->right, res);
 			max[i++] = tree->right->high;
 		}
-		max[i] = tree->high;
+		max[i++] = tree->high;
 		*res = FindMaxArray(max);
 	}
-	if (tree != NULL) {
+	if ((tree != NULL) && (tree->high >= *res)) {
 		*res = tree->high;
+	}
+	if (i == N - 1) {
+		printf("Too much vertices");
+		return;
 	}
 }
 static tree_t* FixTree(tree_t* tree) {
@@ -68,13 +84,16 @@ static tree_t* FixTree(tree_t* tree) {
 	return tree;
 }
 tree_t* DelTree(tree_t* tree, int low, int high) {
-	if (tree == NULL)
+	if (tree == NULL) {
 		return tree;
-	if (low < tree->low)
+	}
+	if (low < tree->low) {
 		tree->left = DelTree(tree->left, low, high);
+	}
 	else {
-		if (low > tree->low || high != tree->high)
+		if (low > tree->low || high != tree->high) {
 			tree->right = DelTree(tree->right, low, high);
+		}
 		else {
 			if (tree->left != NULL && tree->right != NULL) {
 				tree_t* max = MinimumTree(tree->right);
@@ -112,24 +131,30 @@ tree_t* DelTree(tree_t* tree, int low, int high) {
 int FindTree(tree_t* tree, int low, int high) {
 	tree_t* tmp = tree;
 	while (tmp != NULL) {
-		if (tmp->low == low && tmp->high == high)
+		if (tmp->low == low && tmp->high == high) {
 			return FOUND;
+		}
 		else
-			if (low < tmp->low)
+			if (low < tmp->low) {
 				tmp = tmp->left;
+			}
 			else
-				if (low > tmp->low || high != tmp->high)
+				if (low > tmp->low || high != tmp->high) {
 					tmp = tmp->right;
+				}
 	}
 	return NOTFOUND;
 }
 void Intersect(tree_t* tree, int low, int high) {
-	if (tree == NULL)
+	if (tree == NULL) {
 		return;
-	if (!((tree->low > high) || (tree->high < low)))
+	}
+	if (!((tree->low > high) || (tree->high < low))) {
 		printf("Interval [%i,%i] intersects with [%i,%i]\n", low, high, tree->low, tree->high);
-	if (tree->left != NULL && tree->left->max >= low)
+	}
+	if ((tree->left != NULL) && (tree->left->max >= low)) {
 		Intersect(tree->left, low, high);
+	}
 	Intersect(tree->right, low, high);
 }
 void PrintTree(tree_t* tree, int index) {
@@ -146,38 +171,7 @@ void FreeTree(tree_t* tree) {
 		free(tree);
 	}
 }
-//Function for tests
-tree_t* CreateModelTree(tree_t* tree) {
-	tree = (tree_t*)malloc(sizeof(tree_t));
-	if (tree == NULL)
-		return NULL;
-	tree->low = 15;
-	tree->high = 20;
-	tree->max = 30;
-	tree->left = NULL;
-	tree->right = NULL;
-	tree->left = (tree_t*)malloc(sizeof(tree_t));
-	if (tree->left == NULL)
-		return NULL;
-	tree->right = (tree_t*)malloc(sizeof(tree_t));
-	if (tree->right == NULL)
-		return NULL;
-	tree->left->low = 10;
-	tree->left->high = 30;
-	tree->left->max = 30;
-	tree->right->low = 17;
-	tree->right->high = 19;
-	tree->right->max = 19;
-	tree->left->left = NULL;
-	tree->left->right = NULL;
-	tree->right->left = NULL;
-	tree->right->right = NULL;
-	return tree;
-	//       [15, 20]
-	//          30
-	//  [10, 30]    [17, 19]
-	//     30          19
-}
+
 //int main() {
 //    return 0;
 //}
