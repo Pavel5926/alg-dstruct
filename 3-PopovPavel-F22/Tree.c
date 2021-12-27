@@ -51,7 +51,7 @@ static int FindMaxArray(int array[N]) {
 }
 static void MaxOfSubtree(tree_t* tree, int* res) {
 	int i = 0;
-	static int max[N];
+	int max[N];
 	for (int j = 0; j < N; j++) {
 		max[j] = SMALLNUMBER;
 	}
