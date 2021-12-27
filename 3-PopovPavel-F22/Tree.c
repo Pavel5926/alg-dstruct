@@ -51,9 +51,13 @@ static int FindMaxArray(int array[N]) {
 }
 static void MaxOfSubtree(tree_t* tree, int* res) {
 	int i = 0;
-	int max[N];
+	static int max[N];
+	for (int j = 0; j < N; j++) {
+		max[j] = SMALLNUMBER;
+	}
+
 	if (tree != NULL && (tree->left != NULL || tree->right != NULL)) {
-		memset(max, SMALLNUMBER, sizeof(int));
+		//memset(max, -2147483647, sizeof(-2147483647));
 		if (tree->left != NULL) {
 			MaxOfSubtree(tree->left, res);
 			max[i++] = tree->left->high;
