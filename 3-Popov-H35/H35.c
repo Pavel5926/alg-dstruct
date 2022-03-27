@@ -112,7 +112,7 @@ treap_t* Remove(treap_t* tree, int pos) {
 	treap_t* right = NULL;
 	treap_t* mer = NULL;
 	treap_t* tmp = NULL;
-	Split(tree, pos-1, &left, &right);
+	Split(tree, pos - 1, &left, &right);
 	Split(right, 0, &mer, &tmp);
 	tree = Merge(left, tmp);
 	treapDestroy(mer);
@@ -157,7 +157,7 @@ treap_t* RemoveValue(treap_t* tree, int value) {
 	// if element in tree
 	if (pos) {
 		//remove by position
-		return Remove(tree, pos-1);
+		return Remove(tree, pos - 1);
 	}
 	else {
 		// do nothing
@@ -169,7 +169,6 @@ int main() {
 	char command = 0;
 	int data = 0;
 	treap_t* tree = NULL;
-
 	FILE* f = fopen("test.txt", "r");
 	while (fscanf(f, "%c %d \n", &command, &data) != EOF) {
 		if (command == 'a') {
@@ -181,7 +180,7 @@ int main() {
 			tree = RemoveValue(tree, data);
 		}
 		else if (command == 'f') {
-			printf("%s\n",Find(tree, data, 0)?"yes":"no");
+			printf("%s\n", Find(tree, data, 0) ? "yes" : "no");
 		}
 	}
 	return 0;
