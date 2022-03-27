@@ -173,11 +173,12 @@ int main() {
 	FILE* f = fopen("test.txt", "r");
 	while (fscanf(f, "%c %d \n", &command, &data) != EOF) {
 		if (command == 'a') {
-			if (!Find(tree, data, 0));
-			tree = Insert(tree, getTreeSize(tree), data);
+			if (!Find(tree, data, 0)) {
+				tree = Insert(tree, getTreeSize(tree), data);
+			}
 		}
 		else if (command == 'r') {
-			tree = RemoveValue(tree,data);
+			tree = RemoveValue(tree, data);
 		}
 		else if (command == 'f') {
 			printf("%s\n",Find(tree, data, 0)?"yes":"no");
