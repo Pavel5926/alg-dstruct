@@ -4,11 +4,6 @@
 #include <math.h>
 #pragma warning (disable:4996)
 
-typedef enum bool_t {
-	FALSE = 0,
-	TRUE = 1
-} bool_t;
-
 typedef struct treap {
 	int value;
 	int priority;
@@ -79,13 +74,11 @@ treap_t* Merge(treap_t* left, treap_t* right) {
 
 void Split(treap_t* tree, int k, treap_t** left, treap_t** right) {
 	int current_key = 0;
-
 	if (tree == NULL) {
 		*left = NULL;
 		*right = NULL;
 		return;
 	}
-
 	if (getTreeSize(tree->left) <= k) {
 		Split(tree->right, k - getTreeSize(tree->left) - 1, &(tree->right), right);
 		*left = tree;
