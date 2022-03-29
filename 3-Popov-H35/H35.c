@@ -12,7 +12,7 @@ typedef struct treap {
 	struct treap* right;
 }treap_t;
 
-int hash(int value) {
+int Hash(int value) {
 	return abs((int)(pow(value, 5) - 7.2 * pow(value, 3) + 9.5 * pow(value, 2) - 7 * value + 2.5) % (101));
 }
 
@@ -90,13 +90,13 @@ void Split(treap_t* tree, int k, treap_t** left, treap_t** right) {
 	Recount(tree);
 }
 
-treap_t* Insert(treap_t* tree, int pos, int value) {
+treap_t* Insert(treap_t* tree, int pos, int value, int prior) {
 	treap_t* left = NULL;
 	treap_t* right = NULL;
 	if (tree) {
 		Split(tree, pos, &left, &right);
 	}
-	treap_t* mer = treapCreate(value, hash(value));
+	treap_t* mer = treapCreate(value, Hash(value));
 	return Merge(Merge(left, mer), right);
 }
 
@@ -166,7 +166,7 @@ int main() {
 	while (fscanf(f, "%c %d \n", &command, &data) != EOF) {
 		if (command == 'a') {
 			if (!Find(tree, data, 0)) {
-				tree = Insert(tree, getTreeSize(tree), data);
+				tree = Insert(tree, getTreeSize(tree), data, Hash(data));
 			}
 		}
 		else if (command == 'r') {
