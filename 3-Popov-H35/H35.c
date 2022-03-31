@@ -96,7 +96,7 @@ treap_t* Insert(treap_t* tree, int pos, int value, int prior) {
 	if (tree) {
 		Split(tree, pos, &left, &right);
 	}
-	treap_t* mer = treapCreate(value, Hash(value));
+	treap_t* mer = treapCreate(value, prior);
 	return Merge(Merge(left, mer), right);
 }
 
