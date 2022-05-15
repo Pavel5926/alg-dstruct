@@ -2,7 +2,7 @@
 
 tree* CreateNode(int value) {
 	tree* new_node = (tree*)malloc(sizeof(tree));
-	if (new_node) {
+	if (new_node != NULL) {
 		new_node->left = NULL;
 		new_node->mid = NULL;
 		new_node->right = NULL;
@@ -17,7 +17,7 @@ tree* CreateNode(int value) {
 
 tree* CreateNode2(int value, tree* left, tree* mid, tree* right, tree* temp, tree* prev) {
 	tree* new_node = (tree*)malloc(sizeof(tree));
-	if (new_node) {
+	if (new_node != NULL) {
 		new_node->left = left;
 		new_node->mid = mid;
 		new_node->right = right;
@@ -109,7 +109,7 @@ void BeNode2(int value, int* key, tree* node, tree* left, tree* mid) {
 	node->size = 1;
 }
 
-char isLeaf(tree* node) {
+char IsLeaf(tree* node) {
 	if (node == NULL) {
 		return 0;
 	}
@@ -126,11 +126,11 @@ tree* AddNode(tree* node, int value) {
 	if (Search(node, value)) {
 		return Split(node);
 	}
-	if (isLeaf(node)) {
+	if (IsLeaf(node)) {
 		AddKey(value, node);
 	}
 	else {
-		if (value <= node->key[0]) {
+		if (value < node->key[0]) {
 			AddNode(node->left, value);
 		}
 		else {
@@ -189,7 +189,14 @@ tree* Split(tree* item) {
 		return item;
 	}
 	tree* x = CreateNode2(item->key[0], item->left, item->mid, NULL, NULL, item->prev);
+	if (x == NULL) {
+		return NULL;
+	}
 	tree* y = CreateNode2(item->key[2], item->right, item->temp, NULL, NULL, item->prev);
+	if (y == NULL) {
+		free(x);
+		return NULL;
+	}
 	if (x->left) {
 		x->left->prev = x;
 	}

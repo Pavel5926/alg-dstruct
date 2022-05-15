@@ -11,7 +11,6 @@ typedef struct tree {
     struct tree* right;
     struct tree* temp;
     struct tree* prev;
-
 } tree;
 
 char Find(int value, int* key, int size);
@@ -34,7 +33,7 @@ void RemoveKey(int value, tree* node);
 
 void BeNode2(int value, int* key, tree* node, tree* left, tree* mid);
 
-char isLeaf(tree* node);
+char IsLeaf(tree* node);
 
 tree* Split(tree* item);
 
