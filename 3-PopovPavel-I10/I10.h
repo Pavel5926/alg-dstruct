@@ -53,4 +53,4 @@ tree* DeleteNode(tree* node, int value);
 
 void DestroyNode(tree* t);
 
-void PrintNode(tree* node);
+void PrintNode(tree* node, int n);

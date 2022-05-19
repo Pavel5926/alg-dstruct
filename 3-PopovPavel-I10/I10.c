@@ -134,7 +134,7 @@ tree* AddNode(tree* node, int value) {
 			AddNode(node->left, value);
 		}
 		else {
-			if ((node->size == 1) || ((node->size == 2) && value <= node->key[1])) {
+			if ((node->size == 1) || ((node->size == 2) && value < node->key[1])) {
 				AddNode(node->mid, value);
 			}
 			else {
@@ -539,16 +539,27 @@ tree* Redistribute(tree* leaf) {
 	return prev;
 }
 
-void PrintNode(tree* node) {
-	if (node == NULL) {
+void PrintNode(tree* t, int n) {
+	if (t == NULL) {
 		return;
 	}
-	PrintNode(node->left);
-	for (int i = 0; i < node->size; i++) {
-		printf("%d ", node->key[i]);
+	else {
+		PrintNode(t->left, n + 2);
+		for (int i = 0; i < n; i++) {
+			printf("  ");
+		}
+		printf("%d", t->key[0]);
+		printf("\n");
+		PrintNode(t->mid, n + 2);
+		for (int i = 0; i < n; i++) {
+			printf("  ");
+		}
+		if (t->size == 2) {
+			printf("%d", t->key[1]);
+		}
+		printf("\n");
+		PrintNode(t->right, n + 2);
 	}
-	PrintNode(node->mid);
-	PrintNode(node->right);
 }
 
 void DestroyNode(tree* node) {
@@ -585,7 +596,7 @@ int main(void) {
 			}
 			break;
 		case 'p':
-			PrintNode(t);
+			PrintNode(t, 3);
 			putchar('\n');
 			break;
 		case 'q':
