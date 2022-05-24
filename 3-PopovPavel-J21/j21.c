@@ -55,9 +55,6 @@ HashTable HashTableInit(const size_t size, const size_t step) {
 	HashTable res;
 	res.step = step;
 	res.data = (Node*)malloc(size * sizeof(Node));
-	if (!res.data) {
-		exit(-1);
-	}
 	res.size = res.data ? size : 0;
 	for (size_t i = 0; i < res.size; i++) {
 		res.data[i].str = NULL;
@@ -78,12 +75,19 @@ bool Insert(HashTable* hashTable, const char* str) {
 			firstDeleted = index;
 		}
 		index = (index + hashTable->step) % hashTable->size;
-		if (index == indexStart) {
-			return false;
-		}
+		if (index == indexStart) { // iterated through all the table cells
+			if (firstDeleted == -1) { // and no cells ready to re-write
+				return false;
+			}
+			else { // all cells have non-null str, but found one to re-write
+				break;
+			}
+        }
 	}
 	if (firstDeleted != -1) {
-		free(hashTable->data[firstDeleted].str);
+		if (hashTable->data[firstDeleted].str) { // this could be NULL if further malloc failed one time
+			free(hashTable->data[firstDeleted].str);
+		}
 		index = (size_t)firstDeleted;
 	}
 	hashTable->data[index].str = (char*)malloc((strlen(str) + 1) * sizeof(char));
